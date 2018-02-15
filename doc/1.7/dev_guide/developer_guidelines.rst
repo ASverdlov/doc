@@ -110,61 +110,46 @@ Based on [1_] and [2_].
 How to submit a patch for review
 ===========================================================
 
-Since 24.01.2018 changes prepared for review should be submitted
-to patches@tarantool.org.
+Our patch review procedure is based on **email threads**.
+Changes prepared for review are submitted by email to patches@tarantool.org
+using ``git format-patch`` and ``git send-email``.
 
-e-mail messages are prepared using ``git format-patch`` and ``git send-email``.
+An email thread keeps the review history local: all iterations are stored in a
+single mail thread, thus keeping navigation simple.
 
-.. container:: faq
+To unify multiple patches (a **patchset**) into a single thread, we use a
+**cover letter**. A cover letter is needed at all times, unless a patchset
+contains just a single patch. If so, it's the commit message that plays the
+cover letter's role.
 
-    :Q: What a mail thread is and why is it useful?
-    :A: An email thread keeps the review history local: all iterations are
-        stored in a single mail thread, thus making navigation simple.
+A cover letter must contain:
 
-    :Q: When a cover letter is needed?
-    :A: A cover letter unifies multiple patches (a patchset) into a single
-        thread.
+* An answer to the question "what does the patchset ?",
+  e.g. "Improve HASH index search".
+* The branch name.
+* An absolute hyperlink to the issue.
 
-        So, a cover letter is needed at all times, unless a patchset contains
-        just one patch. If so, it's the commit message that plays the cover
-        letter's role.
+If the patchset contains a single patch, all this information is present
+within the patch:
 
-    :Q: What to put in a cover letter?
-    :A: A cover letter must contain:
+* The commit message answers the "what" question.
+* The branch name is the current branch, and you can find it inside
+  the patch body, delimited by `---`.
+* A hyperlink to the issue is available in the commit message.
 
-        * An answer to the question "what does the patchset ?",
-          e.g. "Improve HASH index search".
-        * The branch name.
-        * A hyperlink to the gh issue.
+The required options for ``format-patch``are:
+ * ...
 
-        If the patchset contains just one patch, all this information is present
-        within the patch:
+In the subject, always put ``PATCH`` prefix.
+For all the following reviews in the thread,
+also use ``PATCHSET_VERSION`` prefix, e.g. ``v2``.
 
-        * The commit message answers the "what" question.
-        * The branch name is the current branch, and you can find it inside
-          the patch body, delimited by `---`.
-        * A hyperlink to the gh issue is available in the commit message.
+To put updated changes derived from rebasing (force-pushing) into the same
+mail thread, use ``git send-email`` (this is a standalone git package) without
+the option ``in-reply-to``.
 
-    :Q: Which options to add to ``format-patch``?
-    :A: The required options are:
-
-        * ``--subject-prefix``
-        * subject -- ??? NO OPTION FOUND
-        * the first commit to send -- ??? NO OPTION FOUND
-
-    :Q: What prefixes to put in the subject?
-    :A: Always put ``PATCH``. For all the following reviews in the thread,
-        also use ``PATCHSET_VERSION`` e.g. ``v2``.
-
-    :Q: How to refer to the git branch and issue (in a cover letter)?
-    :A: See Q#3.
-
-    :Q: How to put updated changes derived from rebasing (force-pushing) into
-        the same mail thread?
-    :A: Use ``git send-email`` (this is a standalone git package) without the
-        option ``in-reply-to``.
-
-Check here_ for scripts which might be useful for preparing e-mail messages.
+Also, here_ you can find some scripts which might be useful for preparing e-mail
+messages.
 
 .. _1: https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project
 .. _2: https://chris.beams.io/posts/git-commit/
