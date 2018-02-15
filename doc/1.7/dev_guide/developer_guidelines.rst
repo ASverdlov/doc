@@ -111,45 +111,93 @@ How to submit a patch for review
 ===========================================================
 
 Our patch review procedure is based on **email threads**.
+All iterations are kept in a single mail thread, so it is simple to navigate the
+review history.
+
 Changes prepared for review are submitted by email to patches@tarantool.org
-using ``git format-patch`` and ``git send-email``.
+using ``git format-patch`` and ``git send-email``. Here is the workflow:
 
-An email thread keeps the review history local: all iterations are stored in a
-single mail thread, thus keeping navigation simple.
+1. First-time git setup:
 
-To unify multiple patches (a **patchset**) into a single thread, we use a
-**cover letter**. A cover letter is needed at all times, unless a patchset
-contains just a single patch. If so, it's the commit message that plays the
-cover letter's role.
+   a. Configure your name and email for git:
 
-A cover letter must contain:
+      .. code-block:: console
 
-* An answer to the question "what does the patchset ?",
-  e.g. "Improve HASH index search".
-* The branch name.
-* An absolute hyperlink to the issue.
+          $ git config user.name "Your Name"
+          $ git config user.email "your@mail.com"
 
-If the patchset contains a single patch, all this information is present
-within the patch:
+   b. Configure git to detect renames and copies to make ``git format-patch``
+      output easier to review:
 
-* The commit message answers the "what" question.
-* The branch name is the current branch, and you can find it inside
-  the patch body, delimited by `---`.
-* A hyperlink to the issue is available in the commit message.
+      .. code-block:: console
 
-The required options for ``format-patch``are:
- * ...
+          $ git config --global diff.renames copies
 
-In the subject, always put ``PATCH`` prefix.
-For all the following reviews in the thread,
-also use ``PATCHSET_VERSION`` prefix, e.g. ``v2``.
+2. Make changes in your private branch and commit remotely.
 
-To put updated changes derived from rebasing (force-pushing) into the same
-mail thread, use ``git send-email`` (this is a standalone git package) without
-the option ``in-reply-to``.
+   For every commit, please write a proper
+   ":ref:`commit message <dev_guidelines-commit_message>`".
 
-Also, here_ you can find some scripts which might be useful for preparing e-mail
-messages.
+3. Use ``git format-patch`` to generate patch files for your commits.
+
+   For a single patch:
+
+   .. code-block:: console
+
+       $ git format-patch -1
+
+   For multiple patches:
+
+   .. code-block:: console
+
+       $ git format-patch -n --cover-letter master
+
+   As you see, to unify multiple patches (a **patchset**) into a single thread,
+   we use a **cover letter**.
+   (If a patchset contains just a single patch, it is the commit message that
+   plays the cover letter's role.)
+
+   In a cover letter, please specify:
+
+   * An answer to the question "what does the patchset do?",
+     e.g. "Improve HASH index search".
+     (For a single patch, the answer is in the commit message.)
+   * The branch name.
+     (For a single patch, this is the current branch that you can find
+     inside the patch body, delimited by `---`)
+   * An absolute hyperlink to the issue.
+     (For a single patch, the link is in the commit message.)
+
+   Also, to make mail parsing easier, add "PATCH" as the **subject prefix**:
+
+   .. code-block:: console
+
+       $ git format-patch --subject-prefix="PATCH"
+
+   If you need to a send a next revision of the patch, please remember to
+   use patch versioning in the subject prefix, for example ``v2``:
+
+   .. code-block:: console
+
+       $ git format-patch --subject-prefix="PATCH v2"
+
+   To verify the generated patch files before sending, say:
+
+   .. code-block:: console
+
+       $ more *.patch
+
+4. Use ``git send-email`` to send out your patch files.
+
+   .. code-block:: console
+
+       $ git send-email  --to patches@tarantool.org 00*.patch --in-reply-to ???
+
+   To put updated changes derived from rebasing (force-pushing) into the same
+   mail thread, use ``git send-email`` without the option ``in-reply-to``.
+
+Also, here_ you can find some scripts which might be a handy wrapper above the
+git commands suggested before.
 
 .. _1: https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project
 .. _2: https://chris.beams.io/posts/git-commit/
